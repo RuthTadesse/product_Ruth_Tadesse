@@ -14,8 +14,8 @@ interface FormData {
 }
 
 const ManageProduct: React.FC = () => {
-  const [operation, setOperation] = useState<string>(""); // Track user operation (add, update, delete)
-  const [productId, setProductId] = useState<string>(""); // Track product ID for update and delete
+  const [operation, setOperation] = useState<string>(""); 
+  const [productId, setProductId] = useState<string>(""); 
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
@@ -29,9 +29,9 @@ const ManageProduct: React.FC = () => {
   });
 
   const [alertMessage, setAlertMessage] = useState<string>("");
-  const [updatedFields, setUpdatedFields] = useState<string[]>([]); // Track which fields were updated
+  const [updatedFields, setUpdatedFields] = useState<string[]>([]); 
 
-  // Function to handle form input changes
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -40,13 +40,13 @@ const ManageProduct: React.FC = () => {
       ...prevData,
       [name]: value,
     }));
-    // Track updated fields
+   
     if (!updatedFields.includes(name)) {
       setUpdatedFields([...updatedFields, name]);
     }
   };
 
-  // Function to handle array input changes (tags)
+ 
   const handleTagsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const tagsArray = value.split(",").map((tag) => tag.trim());
@@ -54,13 +54,13 @@ const ManageProduct: React.FC = () => {
       ...prevData,
       tags: tagsArray,
     }));
-    // Track tags updated
+   
     if (!updatedFields.includes("tags")) {
       setUpdatedFields([...updatedFields, "tags"]);
     }
   };
 
-  // Function to handle form submission (add, update, delete)
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -77,34 +77,45 @@ const ManageProduct: React.FC = () => {
         });
         message = "Product added successfully!";
       } else if (operation === "update") {
-        response = await fetch(`https://dummyjson.com/products/${productId}`, {
+        const updatedData = updatedFields.reduce(
+          (acc: Partial<FormData>, field) => {
+        
+            if (field in formData) {
+              (acc as any)[field] = formData[field as keyof FormData];
+            }
+            return acc;
+          },
+          {}
+        );
+
+        response = await fetch(https://dummyjson.com/products/${productId}, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updatedData),
         });
 
         if (response.ok) {
-          // Construct update message based on updated fields
+         
           const updatedMessage = updatedFields
-            .map((field) => `${field} updated`)
+            .map((field) => ${field} updated)
             .join(", ");
-          message = `Product ${updatedMessage} successfully!`; // Update success message
+          message = Product ${updatedMessage} successfully!; 
         } else {
           throw new Error("Failed to update product");
         }
       } else if (operation === "delete") {
-        response = await fetch(`https://dummyjson.com/products/${productId}`, {
+        response = await fetch(https://dummyjson.com/products/${productId}, {
           method: "DELETE",
         });
         message = "Product deleted successfully!";
       }
 
       if (response && response.ok) {
-        setAlertMessage(message); // Set alert message for success
-        setTimeout(() => setAlertMessage(""), 5000); // Clear alert message after 5 seconds
-        // Reset form after successful operation
+        setAlertMessage(message);
+        setTimeout(() => setAlertMessage(""), 3000); 
+     
         setFormData({
           title: "",
           description: "",
@@ -127,15 +138,15 @@ const ManageProduct: React.FC = () => {
     }
   };
 
-  // Function to fetch product details for update and delete
+ 
   const fetchProductDetails = async () => {
     try {
       const response = await fetch(
-        `https://dummyjson.com/products/${productId}`
+        https://dummyjson.com/products/${productId}
       );
       if (response.ok) {
         const data = await response.json();
-        // Set fetched product details to form data
+  
         setFormData(data);
       } else {
         console.error("Failed to fetch product details");
@@ -144,9 +155,8 @@ const ManageProduct: React.FC = () => {
       console.error("Error:", error);
     }
   };
-
-  useEffect(() => {
-    if ((operation === "update" || operation === "delete") && productId) {
+useEffect(() => {
+    if ((operation === "update"  operation === "delete") && productId) {
       fetchProductDetails();
     }
   }, [operation, productId]);
@@ -186,7 +196,7 @@ const ManageProduct: React.FC = () => {
               <option value="delete">Delete Product</option>
             </select>
           </div>
-          {(operation === "update" || operation === "delete") && (
+          {(operation === "update"  operation === "delete") && (
             <div className="mt-4">
               <label
                 htmlFor="productId"
@@ -243,7 +253,6 @@ const ManageProduct: React.FC = () => {
                 required
               />
             </div>
-
             <div>
               <label
                 htmlFor="category"
