@@ -88,7 +88,7 @@ const ManageProduct: React.FC = () => {
           {}
         );
 
-        response = await fetch(https://dummyjson.com/products/${productId}, {
+        response = await fetch(`https://dummyjson.com/products/${productId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -99,14 +99,14 @@ const ManageProduct: React.FC = () => {
         if (response.ok) {
          
           const updatedMessage = updatedFields
-            .map((field) => ${field} updated)
+            .map((field) => `${field} updated`)
             .join(", ");
-          message = Product ${updatedMessage} successfully!; 
+          message = `Product ${updatedMessage} successfully!`; 
         } else {
           throw new Error("Failed to update product");
         }
       } else if (operation === "delete") {
-        response = await fetch(https://dummyjson.com/products/${productId}, {
+        response = await fetch(`https://dummyjson.com/products/${productId}`, {
           method: "DELETE",
         });
         message = "Product deleted successfully!";
@@ -142,7 +142,7 @@ const ManageProduct: React.FC = () => {
   const fetchProductDetails = async () => {
     try {
       const response = await fetch(
-        https://dummyjson.com/products/${productId}
+        `https://dummyjson.com/products/${productId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -155,8 +155,9 @@ const ManageProduct: React.FC = () => {
       console.error("Error:", error);
     }
   };
-useEffect(() => {
-    if ((operation === "update"  operation === "delete") && productId) {
+
+  useEffect(() => {
+    if ((operation === "update" || operation === "delete") && productId) {
       fetchProductDetails();
     }
   }, [operation, productId]);
@@ -196,7 +197,7 @@ useEffect(() => {
               <option value="delete">Delete Product</option>
             </select>
           </div>
-          {(operation === "update"  operation === "delete") && (
+          {(operation === "update" || operation === "delete") && (
             <div className="mt-4">
               <label
                 htmlFor="productId"
@@ -253,6 +254,7 @@ useEffect(() => {
                 required
               />
             </div>
+
             <div>
               <label
                 htmlFor="category"
