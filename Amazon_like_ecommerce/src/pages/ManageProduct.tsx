@@ -14,8 +14,8 @@ interface FormData {
 }
 
 const ManageProduct: React.FC = () => {
-  const [operation, setOperation] = useState<string>(""); 
-  const [productId, setProductId] = useState<string>(""); 
+  const [operation, setOperation] = useState<string>("");
+  const [productId, setProductId] = useState<string>("");
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
@@ -29,8 +29,7 @@ const ManageProduct: React.FC = () => {
   });
 
   const [alertMessage, setAlertMessage] = useState<string>("");
-  const [updatedFields, setUpdatedFields] = useState<string[]>([]); 
-
+  const [updatedFields, setUpdatedFields] = useState<string[]>([]);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,13 +39,12 @@ const ManageProduct: React.FC = () => {
       ...prevData,
       [name]: value,
     }));
-   
+
     if (!updatedFields.includes(name)) {
       setUpdatedFields([...updatedFields, name]);
     }
   };
 
- 
   const handleTagsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const tagsArray = value.split(",").map((tag) => tag.trim());
@@ -54,12 +52,11 @@ const ManageProduct: React.FC = () => {
       ...prevData,
       tags: tagsArray,
     }));
-   
+
     if (!updatedFields.includes("tags")) {
       setUpdatedFields([...updatedFields, "tags"]);
     }
   };
-
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,7 +76,6 @@ const ManageProduct: React.FC = () => {
       } else if (operation === "update") {
         const updatedData = updatedFields.reduce(
           (acc: Partial<FormData>, field) => {
-        
             if (field in formData) {
               (acc as any)[field] = formData[field as keyof FormData];
             }
@@ -97,11 +93,10 @@ const ManageProduct: React.FC = () => {
         });
 
         if (response.ok) {
-         
           const updatedMessage = updatedFields
             .map((field) => `${field} updated`)
             .join(", ");
-          message = `Product ${updatedMessage} successfully!`; 
+          message = `Product ${updatedMessage} successfully!`;
         } else {
           throw new Error("Failed to update product");
         }
@@ -114,8 +109,8 @@ const ManageProduct: React.FC = () => {
 
       if (response && response.ok) {
         setAlertMessage(message);
-        setTimeout(() => setAlertMessage(""), 3000); 
-     
+        setTimeout(() => setAlertMessage(""), 3000);
+
         setFormData({
           title: "",
           description: "",
@@ -138,7 +133,6 @@ const ManageProduct: React.FC = () => {
     }
   };
 
- 
   const fetchProductDetails = async () => {
     try {
       const response = await fetch(
@@ -146,7 +140,6 @@ const ManageProduct: React.FC = () => {
       );
       if (response.ok) {
         const data = await response.json();
-  
         setFormData(data);
       } else {
         console.error("Failed to fetch product details");
@@ -254,7 +247,6 @@ const ManageProduct: React.FC = () => {
                 required
               />
             </div>
-
             <div>
               <label
                 htmlFor="category"

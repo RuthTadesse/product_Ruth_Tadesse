@@ -6,5 +6,8 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = {
+  exportTrailingSlash: true,
+  outdir: 'out'
+};
 
